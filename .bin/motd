@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if tty > /dev/null 2>&1; then
+ if [ ! -f ${HOME}/.motd ]; then
+    uname -sr
+  else
+    IFS=$'\n'
+    arr=($(< ${HOME}/.motd))
+    IFS=''
+    i=0
+    regex='^#' #ignore commented lines
+    while [[ -n "${arr[$i]}" ]]; do
+      [[ ! "${arr[$i]}" =~ $regex ]] && echo -e ${arr[$i]}
+      let i++
+    done
+  fi
+  echo
+fi

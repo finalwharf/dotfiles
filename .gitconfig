@@ -1,0 +1,27 @@
+[core]
+    editor = nano
+    autocrlf = input
+    pager = /usr/local/bin/less -+X -+F
+
+[alias]
+    st = status
+    ci = commit
+    cl = clone
+    co = checkout
+    br = branch
+    mt = mergetool
+
+[diff]
+    tool = araxis
+
+[merge]
+    tool = araxis
+
+[branch]
+    autosetuprebase = always
+
+[push]
+    default = simple
+
+[mergetool "araxis"]
+    path = /Applications/Araxis Merge.app/Contents/Utilities/compare
