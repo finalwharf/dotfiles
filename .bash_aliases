@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
-if [[ ${OSTYPE} =~ darwin* ]]; then
-  alias ls="ls -CFa"
-  alias ll="ls -hlFGa"
+if [[ $OSTYPE =~ darwin* || $OSTYPE =~ freebsd* ]]; then
+  if [[ -f /usr/local/bin/gls ]]; then
+    alias ls="gls -CFa --color=auto"
+    alias ll="gls -hlFa --color=auto"
+  else
+    alias ls="ls -CFa"
+    alias ll="ls -hlFGa"
+  fi
 else
   alias ls="ls -CFa --color=auto"
   alias ll="ls -hlFa --color=auto"
