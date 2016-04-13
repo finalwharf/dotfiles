@@ -134,6 +134,18 @@ export LESSOPEN='|~/.bin/less-pygments %s'
 # Enable autocomplete in python
 export PYTHONSTARTUP=~/.pythonrc
 
+export WORKON_HOME=$HOME/.virtualenvs
+#export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
+#export PIP_VIRTUALENV_BASE=$WORKON_HOME
+export PIP_RESPECT_VIRTUALENV=true
+
+if [[ -r /usr/local/bin/virtualenvwrapper.sh ]]; then
+    source /usr/local/bin/virtualenvwrapper.sh
+else
+    echo "WARNING: Can't find virtualenvwrapper.sh"
+fi
+
 [[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
 
 # Load RVM into a shell session *as a function*
