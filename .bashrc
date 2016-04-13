@@ -123,7 +123,9 @@ export HISTTIMEFORMAT="%d.%m.%y %T - "
 # export LESSHSTFILE=/dev/null
 
 export CLICOLOR="1"
-# export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
+# Default colors from OSX's ls
+export LSCOLORS="exfxcxdxbxegedabagacad"
+
 export TERM="xterm-256color"
 
 export LESS="-R"

@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
-# alias ls="gls -CFa --color=auto"
-# alias ll="gls -hlFGa --color=auto"
-alias ls="ls -CFa"
-alias ll="ls -hlFGa"
+if [[ ${OSTYPE} =~ darwin* ]]; then
+  alias ls="ls -CFa"
+  alias ll="ls -hlFGa"
+else
+  alias ls="ls -CFa --color=auto"
+  alias ll="ls -hlFa --color=auto"
+fi
+
 alias l="ll"
 alias lll="ll"
 alias kk="ll"
