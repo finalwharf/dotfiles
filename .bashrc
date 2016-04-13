@@ -66,21 +66,26 @@ prompt_command ()
     fi
   fi
 
-  # Check for Ruby or Python environments
+  # Check for Ruby or Python envs
   rvm_gemset=`~/.rvm/bin/rvm-prompt g 2> /dev/null | sed s/@//`
   [[ -n $rvm_gemset ]] && rvm="$BLUE[rvm:$rvm_gemset]$RESET"
   [[ -n $VIRTUAL_ENV ]] && pve="$CYAN[env:${VIRTUAL_ENV##*/}]$RESET"
 
-  export PS1="$RESET$GREEN\u$RESET@$CYAN\h$RESET(\w)$RESET$rvm$pve$git$svn$RESET\\$ "
+  # Only works if this .bashrc is copied in root's home and the default shell is bash
+  local user="$GREEN\u"
+  [[ $UID == 0 ]] && user="$RED\u"
+
+  export PS1="$RESET$user$RESET@$CYAN\h$RESET(\w)$RESET$rvm$pve$git$svn$RESET\\$ "
 }
 
 if [[ -z $PROMPT_COMMAND ]]; then
-  PROMPT_COMMAND=prompt_command
+  export PROMPT_COMMAND=prompt_command
 else
-  PROMPT_COMMAND="$PROMPT_COMMAND; prompt_command"
+  export PROMPT_COMMAND="$PROMPT_COMMAND; prompt_command"
 fi
 
-export PROMPT_COMMAND
+# Set umask :@
+umask 0022
 
 # Fix PATHs
 PATH=${PATH/\/usr\/local\/bin:}
