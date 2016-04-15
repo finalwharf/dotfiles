@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+
+export GIT_PROMPT_ENABLED=true
+export SVN_PROMPT_ENABLED=true
+
 prompt_command ()
 {
   local RESET="\[\033[00;00m\]"
@@ -9,55 +14,60 @@ prompt_command ()
   local PINK="\[\033[00;35m\]"
   local CYAN="\[\033[00;36m\]"
 
-  local dir=""
-  local svn=""
-  local git=""
-  local rvm=""
-  local pve=""
-  local branch=""
-  local status=""
-  local changes=""
-  local rvm_gemset=""
+  local dir=
+  local svn=
+  local git=
+  local rvm=
+  local pve=
+  local branch=
+  local status=
+  local changes=
+  local rvm_gemset=
 
-  # Check for SVN repos
-  dir="$PWD"
-  while [[ ! -d "$dir/.svn" && -n "$dir" ]]; do
-    dir="${dir%/*}"
-  done
+  # This is more readable than `if $GIT_PROMPT_ENABLED; then`
+  if [[ $GIT_PROMPT_ENABLED == true ]] ; then
+    # Check for Git repos
+    dir="$PWD"
+    status=""
+    changes=""
+    while [[ ! -d "$dir/.git" && -n "$dir" ]]; do
+      dir="${dir%/*}"
+    done
 
-  if [[ -n "$dir" ]]; then
-    status=`svn status 2> /dev/null`
+    if [[ -n "$dir" ]]; then
+      branch=`git symbolic-ref HEAD 2> /dev/null`
+      branch="${branch#refs/heads/}"
 
-    if [[ -n "$status" ]]; then
-      changes=`echo "$status" | wc -l`
-      svn="$RED[svn:${changes//[[:space:]]/}]$RESET"
-    else
-      svn="$GREEN[svn]$RESET"
+      if [[ -n "$branch" ]]; then
+        status=`git status --porcelain 2> /dev/null`
+
+        if [[ -n "$status" ]]; then
+          changes=`echo "$status" | wc -l`
+          git="$RED[git:$branch:${changes//[[:space:]]/}]"
+        else
+          git="$GREEN[git:$branch]"
+        fi
+        git="$git$RESET"
+      fi
     fi
   fi
 
-  # Check for Git repos
-  dir="$PWD"
-  status=""
-  changes=""
-  while [[ ! -d "$dir/.git" && -n "$dir" ]]; do
-    dir="${dir%/*}"
-  done
+  if [[ $SVN_PROMPT_ENABLED == true ]]; then
+    # Check for SVN repos
+    dir="$PWD"
+    while [[ ! -d "$dir/.svn" && -n "$dir" ]]; do
+      dir="${dir%/*}"
+    done
 
-  if [[ -n "$dir" ]]; then
-    branch=`git symbolic-ref HEAD 2> /dev/null`
-    branch="${branch#refs/heads/}"
-
-    if [[ -n "$branch" ]]; then
-      status=`git status --porcelain 2> /dev/null`
+    if [[ -n "$dir" ]]; then
+      status=`svn status 2> /dev/null`
 
       if [[ -n "$status" ]]; then
         changes=`echo "$status" | wc -l`
-        git="$RED[git:$branch:${changes//[[:space:]]/}]"
+        svn="$RED[svn:${changes//[[:space:]]/}]$RESET"
       else
-        git="$GREEN[git:$branch]"
+        svn="$GREEN[svn]$RESET"
       fi
-      git="$git$RESET"
     fi
   fi
 
@@ -245,4 +255,26 @@ create_ios_icons()
   convert $1 -resize 29x29\!      "$dir/app_icon_29x29.png"
   convert $1 -resize 44x44\!      "$dir/app_icon_44x44.png"
   convert $1 -resize 22x22\!      "$dir/app_icon_22x22.png"
+}
+
+disable ()
+{
+  case "$1" in
+  "git" )
+    echo "Disabling Git prompt."
+    GIT_PROMPT_ENABLED=false
+  ;;
+  "svn" )
+    echo "Disabling Svn prompt."
+    SVN_PROMPT_ENABLED=false
+  ;;
+  "all" )
+    echo "Disabling both Git and Svn prompt."
+    GIT_PROMPT_ENABLED=false
+    SVN_PROMPT_ENABLED=false
+  ;;
+  * )
+    echo "Usage:"
+    echo "  $FUNCNAME [git|svn|all]"
+  esac
 }
