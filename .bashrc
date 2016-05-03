@@ -43,17 +43,16 @@ export PATH
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-export HISTORY_SIZE=1000
-export HISTSIZE=$HISTORY_SIZE
-export HISTFILESIZE=$(($HISTORY_SIZE * 2)) # Times 2 - so we can preserve command timestamps
-export HISTTIMEFORMAT="%d.%m.%y %T - "
 # export HISTFILE=/dev/null
 # export LESSHSTFILE=/dev/null
+export HISTSIZE=1000
+export HISTFILESIZE=1000
 
 # Default colors for ls
 export LSCOLORS="ExGxfxfxbxcxDxBxBxxexe"
 export LS_COLORS="di=01;34:ln=01;36:so=35:pi=35:ex=31:bd=33:cd=01;33:or=01;31;40:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:rs=0:mh=00:do=01;35:";
 
+export TERM="xterm-256color"
 export LESS="-R"
 export LESSOPEN='|~/.bin/less-pygments %s'
 
@@ -66,11 +65,8 @@ export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
 #export PIP_VIRTUALENV_BASE=$WORKON_HOME
 export PIP_RESPECT_VIRTUALENV=true
 
-if [[ -r /usr/local/bin/virtualenvwrapper.sh ]]; then
-    source /usr/local/bin/virtualenvwrapper.sh
-else
-    echo "WARNING: Can't find virtualenvwrapper.sh"
-fi
+# Load VirtualenvWrapper
+[[ -r /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
 
 # Load RVM into a shell session *as a function*
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
