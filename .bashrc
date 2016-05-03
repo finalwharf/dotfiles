@@ -54,14 +54,14 @@ export LS_COLORS="di=01;34:ln=01;36:so=35:pi=35:ex=31:bd=33:cd=01;33:or=01;31;40
 
 export TERM="xterm-256color"
 export LESS="-R"
-export LESSOPEN='|~/.bin/less-pygments %s'
+export LESSOPEN="|~/.bin/less-pygments %s"
 
 # Enable autocomplete in python
 export PYTHONSTARTUP=~/.pythonrc
 
 export WORKON_HOME=$HOME/.virtualenvs
 #export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
-export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
+export VIRTUALENVWRAPPER_VIRTUALENV_ARGS="--no-site-packages"
 #export PIP_VIRTUALENV_BASE=$WORKON_HOME
 export PIP_RESPECT_VIRTUALENV=true
 
