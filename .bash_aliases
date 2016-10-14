@@ -18,6 +18,8 @@ alias lll="ll"
 alias kk="ll"
 alias li="ll"
 
+alias coffee="caffeinate -sim"
+
 alias grep="grep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
@@ -57,6 +59,9 @@ siff ()
 {
   svn diff $@ | less -r
 }
+
+# Vim
+alias nano="vim"
 
 # Emacs
 alias e="emacs"

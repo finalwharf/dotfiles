@@ -103,20 +103,30 @@ new()
 
   local RUBY_VERSION_FILENAME=".ruby-version"
   echo "=> Creating '$RUBY_VERSION_FILENAME' file..."
-  echo $ruby_version > $project_name/$RUBY_VERSION_FILENAME
+  echo "$ruby_version" > "$project_name/$RUBY_VERSION_FILENAME"
 
   local RUBY_GEMSET_FILENAME=".ruby-gemset"
   echo "=> Creating '$RUBY_GEMSET_FILENAME' file..."
-  echo $project_name > $project_name/$RUBY_GEMSET_FILENAME
+  echo "$project_name" > "$project_name/$RUBY_GEMSET_FILENAME"
 
   echo "=> Switching to project directory..."
-  cd $project_name
+  cd "$project_name"
 
-  echo "=> Installing Rails..."
+  echo "=> Installing Rails. This might take a while..."
   gem install rails
 
   echo "=> Creating '$project_name' app..."
   rails new . -d postgresql
+
+  echo "=> Locking Ruby version ($ruby_version) in Gemfile ..."
+  local ruby_version_digits=$(echo $ruby_version | cut -d "-" -f 2)
+  local source_line=$(head -n 1 Gemfile)
+  local gem_list=$(tail -n +2 Gemfile)
+
+  echo -n ""                             > Gemfile # Zero out the Gemfile
+  echo "$source_line"                   >> Gemfile
+  echo "ruby \"$ruby_version_digits\""  >> Gemfile
+  echo "$gem_list"                      >> Gemfile
 
   echo "=> Adding 'database.yml' to '.gitignore'"
   cp config/database.yml config/database.example.yml
@@ -137,8 +147,7 @@ command_not_found_handle ()
 {
   RESET="\033[00;00m"
   RED="\033[00;31m"
-  # command_not_found_handle only works on Bash 4, so we can safely use ${var^}
-  echo -e "$RED$1$RESET: command not found." >&2
+  echo -e "Fuck! $RED$1$RESET: command not found." >&2
 }
 
 ip ()
@@ -159,25 +168,65 @@ open ()
 
 hrep ()
 {
-  history | grep --color=auto "$@" | cut -c 28- | grep -v hrep | sort | uniq
+  history | grep -i "$*" | sed -E s/^[[:space:]]*[[:digit:]]+[[:space:]]+//g | grep -v hrep | sort | uniq
 }
 
 poke ()
 {
-  [[ -z $1 ]] && return
+  if [[ -z "$1" ]]; then
+    echo "Usage:"
+    echo "  $FUNCNAME filename1[.ext] filename2.[ext]"
+    return
+  fi
 
-  local filename=$(basename $1)
-  local ext=${filename##*.}
-  declare -A interpreters
-  interpreters=(
-    ["rb"]="#!/usr/bin/env ruby"
-    ["py"]="#!/usr/bin/env python"
-    ["js"]="#!/usr/bin/env node"
-  )
+  for filename in "$@"; do
 
-  touch $filename
-  chmod +x $filename
-  echo ${interpreters[$ext]} > $filename
+    if [[ -f "$filename" ]]; then
+      YELLOW="\033[00;33m"
+      RESET="\033[00;30m"
+      echo -e "$YELLOW$filename already exists!$RESET" >&2
+      return
+    fi
+
+    local ext=""
+    local interpreter=""
+
+    # If we have a dot in the filename, use the extension to
+    # determine the interpreter. Otherwise, assume it's a shell
+    # script. Use `touch` to create a refular file.
+    if [[ $filename =~ ^.+\..+$ ]]; then
+      ext=${filename##*.}
+    else
+      ext="sh"
+    fi
+
+    case "$ext" in
+      "sh")
+        interpreter="#!/usr/bin/env bash"
+        ;;
+      "rb")
+        interpreter="#!/usr/bin/env ruby"
+        ;;
+      "py")
+        interpreter="#!/usr/bin/env python"
+        ;;
+      "js")
+        interpreter="#!/usr/bin/env node"
+        ;;
+      "php")
+        interpreter="#!/usr/bin/env php"
+        ;;
+    esac
+
+    touch $filename
+
+    # If we match an extension with an interpreter, make the file execitable.
+    # Otherwise, leave the file untouched (pun intended).
+    if [[ -n $interpreter ]]; then
+      chmod +x $filename
+      echo "$interpreter" > $filename
+    fi
+  done
 }
 
 rubify ()
@@ -275,6 +324,6 @@ disable ()
   ;;
   * )
     echo "Usage:"
-    echo "  $FUNCNAME [git|svn|all]"
+    echo "  $0 [git|svn|all]"
   esac
 }

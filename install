@@ -1,35 +1,116 @@
 #!/usr/bin/env bash
 
-install_dotfiles()
+DOT_FILES=(  \
+  .bashrc         \
+  .bash_functions \
+  .bash_profile   \
+  .bash_aliases   \
+  .gitconfig      \
+  .gitignore      \
+  .irbrc          \
+  .pythonrc       \
+  .motd           \
+  .bin            \
+)
+
+warn_file_exists ()
 {
-  local files=(     \
-    .bashrc         \
-    .bash_functions \
-    .bash_profile   \
-    .bash_aliases   \
-    .gitconfig      \
-    .gitignore      \
-    .nanorc         \
-    .irbrc          \
-    .pythonrc       \
-    .motd           \
-    .bin            \
-  )
+  local filename="$1"
+  local filename_short=${filename/$HOME/\~}
 
-  local path="$PWD"
-  local install_path="$HOME"
+  while true; do
+    echo -en "  File ${RED}${filename_short}${RESET} already exists! Overwrite? [y/N]: "
 
-  [[ -n "$1" ]] && install_path="$1"
+    read -n 1 -r overwrite
 
-  echo "Installing dotfiles. Hang tight!"
+    [[ -n $overwrite ]] && echo
 
-  for file in ${files[@]}; do
-    rm -rf "$install_path/$file"
-    ln -s "$path/$file" "$install_path/$file"
-    echo "  $file"
+    if [[ "$overwrite" =~ ^[Yy]$ ]]; then
+      return 0
+    elif [[ "$overwrite" =~ ^[Nn]$ || -z $overwrite ]]; then
+      return 1
+    fi
   done
-
-  echo "Completed!"
 }
 
-install_dotfiles "$@"
+uninstall_dotfiles ()
+{
+  local source_file=
+  local destination_file=
+
+  local source_directory="$PWD"
+  local destination_directory="$HOME"
+
+  for file in ${DOT_FILES[@]}; do
+    source_file="$source_directory/$file"
+    destination_file="$destination_directory/$file"
+    destination_file_short=${destination_file/$HOME/\~}
+
+    echo -e "${YELLOW}Removing${RESET} ${RED}${destination_file_short}${RESET}${YELLOW}.${RESET}"
+    rm -rf "$destination_file"
+  done
+}
+
+install_dotfiles()
+{
+  local RESET="\033[00;00m"
+  local GREEN="\033[00;32m"
+  local RED="\033[00;31m"
+  local YELLOW="\033[00;33m"
+
+  local source_file=
+  local destination_file=
+
+  local source_directory="$PWD"
+  local destination_directory="$HOME"
+
+  [[ -n "$1" ]] && destination_directory="${1%/}"
+
+  echo -e "${GREEN}Installing dotfiles...${RESET}"
+
+  for file in ${DOT_FILES[@]}; do
+    source_file="$source_directory/$file"
+    destination_file="$destination_directory/$file"
+    destination_file_short=${destination_file/$HOME/\~}
+
+    if [[ -e $destination_file ]]; then
+      if warn_file_exists "$destination_file"; then
+        echo -e "${YELLOW}    Removing ${destination_file_short}.${RESET}"
+        rm -rf "$destination_file"
+      else
+        echo -e "${YELLOW}   Skipping ${destination_file_short}.${RESET}"
+        continue
+      fi
+    fi
+
+    echo -e "${GREEN}    Installing ${destination_file_short}.${RESET}"
+    ln -s "$source_file" "$destination_file"
+  done
+
+  echo -e "${GREEN}Completed!${RESET}"
+}
+
+perform_action ()
+{
+  local action="$1"
+
+  # install
+  # install /var/root
+  # install --remove
+  # install --remove /var/root
+
+  if [[ $action == "-h" || "action" == "--help" ]]; then
+    echo "Usage:"
+    echo "    $0 [--remove] [/path/to/install/dir]"
+    return 0
+  fi
+
+  if [[ $action == "--remove" ]]; then
+    shift
+    uninstall_dotfiles "$@"
+  else
+    install_dotfiles "$@"
+  fi
+}
+
+perform_action "$@"

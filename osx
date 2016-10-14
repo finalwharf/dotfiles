@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Enable Backspace/Delete key in Safari
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled -bool YES
+
+# Make OS X screenshots without window shadows
+defaults write com.apple.screencapture disable-shadow -bool YES
+
+# Removing the date and time Stamp from Screenshots
+defaults write com.apple.screencapture include-date -bool NO
+
+# Change Notification Center's banner display time
+defaults write com.apple.notificationcenterui bannerTime 3
+
+# Disable TextEdit's Ruler
+defaults write com.apple.TextEdit ShowRuler 0
+
+# Open a new file in TextEdit on launch
+defaults write -g NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool NO
+
+killall SystemUIServer
+echo "SystemUIServer was killed for some of the settings to take effect!"
