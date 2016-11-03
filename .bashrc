@@ -30,6 +30,9 @@ PATH=${PATH/:\/usr\/local\/sbin}
 [[ -d "$HOME/local/bin" ]]          && PATH="$HOME/local/bin:$PATH"
 [[ -d "$HOME/.local/bin" ]]         && PATH="$HOME/.local/bin:$PATH"
 
+export EDITOR="vim"
+export GIT_EDITOR="$EDITOR"
+
 # Add RVM to PATH for scripting
 PATH=$PATH:$HOME/.rvm/bin
 
@@ -85,3 +88,6 @@ elif [[ -f /usr/local/share/bash-completion/bash_completion ]]; then
 elif [[ -f /etc/bash_completion ]]; then
   source /etc/bash_completion
 fi
+
+export NVM_DIR="/Users/danny/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm

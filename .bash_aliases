@@ -101,6 +101,8 @@ alias u="unicorn -c config/unicorn.rb"
 alias t="rails server thin"
 alias start="foreman start"
 
+alias server="rails server"
+
 alias i_screwed_up="drop && create && migrate && seed"
 alias todo="rake todo"
 
