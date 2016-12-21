@@ -1,27 +1,28 @@
 [core]
-    editor = vim
-    autocrlf = input
-    pager = /usr/local/bin/less -+X -+F
+	editor = vim
+	autocrlf = input
+	pager = /usr/local/bin/less -+X -+F
 
 [alias]
-    st = status
-    ci = commit
-    cl = clone
-    co = checkout
-    br = branch
-    mt = mergetool
-
-[diff]
-    tool = araxis
+	st = status
+	ci = commit
+	cl = clone
+	co = checkout
+	br = branch
+	mt = mergetool
 
 [merge]
-    tool = araxis
+	tool = araxis
 
 [branch]
-    autosetuprebase = always
+	autosetuprebase = always
 
 [push]
-    default = simple
+	default = simple
 
 [mergetool "araxis"]
-    path = /Applications/Araxis Merge.app/Contents/Utilities/compare
+	path = /Applications/Araxis Merge.app/Contents/Utilities/compare
+[user]
+	name = Danny Radev
+	email = danny@dradev.net
+
