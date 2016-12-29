@@ -147,7 +147,7 @@ command_not_found_handle ()
 {
   RESET="\033[00;00m"
   RED="\033[00;31m"
-  echo -e "Fuck! $RED$1$RESET: command not found." >&2
+  echo -e "Fuck! $RED$1$RESET not found." >&2
 }
 
 ip ()
