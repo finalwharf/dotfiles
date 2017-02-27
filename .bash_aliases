@@ -5,8 +5,8 @@ if [[ $OSTYPE =~ darwin* || $OSTYPE =~ freebsd* ]]; then
   alias ll="ls -AFGhl"
 
   if [[ -f /usr/local/bin/gls ]]; then
-    alias ls="gls -ACF --color=auto"
-    alias ll="gls -AFhl --color=auto"
+    alias ls="gls -ACFN --color=auto"
+    alias ll="gls -AFhlN --color=auto"
   fi
 else
   alias ls="ls -ACF --color=auto"
@@ -110,8 +110,12 @@ alias p="ping"
 alias pp="p abv.bg"
 
 # Python stuff
+# alias python="python"
 alias py="python"
+# alias pip="pip"
 alias pipi="pip"
+
+alias bat="pmset -g batt | grep InternalBattery | sed -E s/.*\([[:digit:]]+:[[:digit:]]+\).*/\\\1/"
 
 # virtualenv aliases
 # http://blog.doughellmann.com/2010/01/virtualenvwrapper-tips-and-tricks.html

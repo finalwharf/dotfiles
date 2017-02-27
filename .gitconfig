@@ -1,7 +1,7 @@
 [core]
 	editor = vim
 	autocrlf = input
-	pager = /usr/local/bin/less -+X -+F
+	pager = less -+X -+F
 
 [alias]
 	st = status
@@ -10,6 +10,7 @@
 	co = checkout
 	br = branch
 	mt = mergetool
+	punch = push --force
 
 [merge]
 	tool = araxis

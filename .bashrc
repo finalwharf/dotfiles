@@ -61,12 +61,12 @@ export LESS="-R"
 export LESSOPEN="|~/.bin/less-pygments %s"
 
 # Enable autocomplete in python
-export PYTHONSTARTUP=~/.pythonrc
+export PYTHONSTARTUP="$HOME/.pythonrc"
 
-export WORKON_HOME=$HOME/.virtualenvs
-#export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+export WORKON_HOME="$HOME/.virtualenvs"
+export VIRTUALENVWRAPPER_PYTHON="/usr/local/bin/python"
 export VIRTUALENVWRAPPER_VIRTUALENV_ARGS="--no-site-packages"
-#export PIP_VIRTUALENV_BASE=$WORKON_HOME
+export PIP_VIRTUALENV_BASE="$WORKON_HOME"
 export PIP_RESPECT_VIRTUALENV=true
 
 # Load VirtualenvWrapper
