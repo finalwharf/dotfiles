@@ -4,7 +4,7 @@ if [[ $OSTYPE =~ darwin* || $OSTYPE =~ freebsd* ]]; then
   alias ls="ls -ACFG"
   alias ll="ls -AFGhl"
 
-  if [[ -f /usr/local/bin/gls ]]; then
+  if [[ -x /usr/local/bin/gls ]]; then
     alias ls="gls -ACFN --color=auto"
     alias ll="gls -AFhlN --color=auto"
   fi
@@ -130,3 +130,6 @@ alias v.add2virtualenv="add2virtualenv"
 alias v.cdsitepackages="cdsitepackages"
 alias v.cd="cdvirtualenv"
 alias v.lssitepackages="lssitepackages"
+
+alias bon="defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled -bool YES"
+alias boff="defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled -bool NO"

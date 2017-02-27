@@ -23,7 +23,7 @@ warn_file_exists ()
 
     read -n 1 -r overwrite
 
-    [[ -n $overwrite ]] && echo
+    [[ -n "$overwrite" ]] && echo
 
     if [[ "$overwrite" =~ ^[Yy]$ ]]; then
       return 0
@@ -71,9 +71,10 @@ install_dotfiles()
   for file in ${DOT_FILES[@]}; do
     source_file="$source_directory/$file"
     destination_file="$destination_directory/$file"
-    destination_file_short=${destination_file/$HOME/\~}
+    destination_file_short="${destination_file/$HOME/\~}"
 
-    if [[ -e $destination_file ]]; then
+    # if [[ -e "$destination_file" ]] wont work if there's a symlink to non-existent file
+    if [[ -L "$destination_file" || -f "$destination_file" ]]; then
       if warn_file_exists "$destination_file"; then
         echo -e "${YELLOW}    Removing ${destination_file_short}.${RESET}"
         rm -rf "$destination_file"
@@ -87,7 +88,20 @@ install_dotfiles()
     ln -s "$source_file" "$destination_file"
   done
 
-  echo -e "${GREEN}Completed!${RESET}"
+  echo -e "${GREEN}Instalation completed!\n${RESET}"
+
+  # echo -en "${GREEN}Would you like to source the newly installed .bashrc? [y/N]: ${RESET}"
+
+  # read -n 1 -r source_bash
+
+  # [[ -n "$source_bash" ]] && echo
+
+  # if [[ "$source_bash" =~ ^[Yy]$ ]]; then
+  #   echo -e "${GREEN}\nSourcing .bashrc...${RESET}"
+  #   source ~/.bashrc
+  # fi
+
+  # echo -e "${GREEN}\nDone!${RESET}"
 }
 
 perform_action ()

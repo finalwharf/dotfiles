@@ -6,6 +6,7 @@
 [[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
 [[ -f ~/.bash_functions ]] && source ~/.bash_functions
 [[ -f ~/.bash_system ]] && source ~/.bash_system
+[[ -f ~/.bash_custom ]] && source ~/.bash_custom
 
 if [[ -z $PROMPT_COMMAND ]]; then
   export PROMPT_COMMAND=prompt_command
